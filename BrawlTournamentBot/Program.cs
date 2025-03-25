@@ -37,15 +37,18 @@ class Program
         if (message.Author.IsBot || message.Author.IsWebhook || !message.Content.StartsWith("/")) return;
         string[] command = message.Content.Remove(0, 1).Split(" ");
 
-        if (command[0] == "troll" && command.Length > 1)
+        if (command[0] == "troll")
         {
+            if (command.Length == 1)
+            {await SendMessage("Tu parle de qui ??", message.Channel);}
+            
             if (command[1].ToLower().Contains("math"))
             {
                 await SendMessage("Mathe-man en vrai c'est le goat", message.Channel);
                 await Troll(message.Author.Username, message.Channel);
                 return;
             }
-            
+
             await Troll(command[1], message.Channel);
         }
         

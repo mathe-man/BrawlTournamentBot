@@ -4,6 +4,9 @@ using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
 
+
+namespace BrawlTournamentBot;
+
 class Program
 {
     private DiscordSocketClient _client;
@@ -19,7 +22,9 @@ class Program
         
         _client.Log += Log;
         _client.MessageReceived += MessageReceivedAsync;
+        _client.ButtonExecuted += Commands.HandleButton;
 
+        
         await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
 

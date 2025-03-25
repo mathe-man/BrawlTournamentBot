@@ -6,6 +6,12 @@ namespace BrawlTournamentBot;
 
 public class Commands : InteractionModuleBase<SocketInteractionContext>
 {
+    [SlashCommand("help", "Affiche un message d'aide à propos de ce bot")]
+    public async Task Help()
+    {
+        await Say("L'aide du bot sera bientôt ajouté.", Context.Channel);
+    }
+    
     [SlashCommand("say", "Fait dire quelque chose au bot")]
     public async Task Say([Summary("Texte", "Le texte qu'il écrira")] string text,
         [Summary("channel", "le channel où il écrira le message")] ISocketMessageChannel? channel = null)
@@ -21,6 +27,9 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
             
         }
     }
+    
+    
+    
     
     [SlashCommand("troll", "Ajoute une nom ensuite pour le troll")]
     public async Task Troll([Summary("nom", "le nom à troller")] string name)

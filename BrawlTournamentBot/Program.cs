@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
 
 class Program
 {
     private DiscordSocketClient _client;
-    private const string _TOKEN = "MTM1Mzk1OTAyMTgxMTQ2NjI2Mg.G9i5la.ifu_BCX9FIFgeFIht_iU1jX1mIdo29e1mmXl6o"; // Remplace par le vrai token de ton bot
-
+    private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
     public async Task RunBotAsync()
@@ -20,7 +20,7 @@ class Program
         _client.Log += Log;
         _client.MessageReceived += MessageReceivedAsync;
 
-        await _client.LoginAsync(TokenType.Bot, _TOKEN);
+        await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
 
         await Task.Delay(-1); // Garde le bot en ligne

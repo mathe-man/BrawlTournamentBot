@@ -40,7 +40,7 @@ class Program
         if (command[0] == "troll")
         {
             if (command.Length == 1)
-            {await SendMessage("Tu parle de qui ??", message.Channel);}
+            {await SendMessage("Tu parle de qui ??", message.Channel); return;}
             
             if (command[1].ToLower().Contains("math"))
             {

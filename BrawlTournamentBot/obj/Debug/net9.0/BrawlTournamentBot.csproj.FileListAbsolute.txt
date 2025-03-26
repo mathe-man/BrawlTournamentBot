@@ -26,8 +26,6 @@
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/obj/Debug/net9.0/BrawlTournamentBot.pdb
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/obj/Debug/net9.0/BrawlTournamentBot.genruntimeconfig.cache
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/obj/Debug/net9.0/ref/BrawlTournamentBot.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/EPPlus.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/EPPlus.Interfaces.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Configuration.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Configuration.FileExtensions.dll
@@ -36,12 +34,6 @@
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.FileProviders.Physical.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.FileSystemGlobbing.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Primitives.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.IO.RecyclableMemoryStream.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/System.Security.Cryptography.Pkcs.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/System.Security.Cryptography.Xml.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/System.Text.Encoding.CodePages.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Security.Cryptography.Pkcs.dll
-/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Text.Encoding.CodePages.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/obj/Debug/net9.0/BrawlTournamentBot.sourcelink.json
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Configuration.Binder.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/Microsoft.Extensions.Configuration.CommandLine.dll
@@ -70,3 +62,11 @@
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll
 /media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/runtimes/win/lib/net9.0/System.Text.Encodings.Web.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/ClosedXML.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/ClosedXML.Parser.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/DocumentFormat.OpenXml.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/DocumentFormat.OpenXml.Framework.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/ExcelNumberFormat.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/RBush.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/SixLabors.Fonts.dll
+/media/mathe/DATA/programme/C#/BrawlTournamentBot/BrawlTournamentBot/bin/Debug/net9.0/System.IO.Packaging.dll

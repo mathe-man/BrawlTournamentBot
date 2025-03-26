@@ -23,6 +23,7 @@ class Program
     
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
+    //static void Main(string[] args) => DataBase.RunDB();
 
     public async Task RunBotAsync()
     {
@@ -45,6 +46,8 @@ class Program
         _client = _services.GetRequiredService<DiscordSocketClient>();
         _commands = _services.GetRequiredService<InteractionService>();
         
+        
+        
         _client.Log += LogAsync;
         _client.Ready += ReadyAsync;
         _client.MessageReceived += MessageReceivedAsync;
@@ -57,6 +60,8 @@ class Program
         var commandHandler = _services.GetRequiredService<CommandHandler>();
         await commandHandler.InitializeAsync();
 
+        //await Commands.Display(_client.Guilds.First());
+        
         await Task.Delay(-1); // Garde le bot en ligne
     }
 

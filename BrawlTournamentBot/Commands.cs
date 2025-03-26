@@ -69,8 +69,53 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
 
         await Say($"{name} est grave nul en vrai");
     }
+    
+    
+    
+    
+    //Debug commands
+    [SlashCommand("display", "Montre un arbre représentant le serveur")]
+    public async Task Display()
+    {
+        SocketGuild guild = Context.Guild;
+        string response = "";
+        
+        response += $"📌 Serveur : {guild.Name} (ID: {guild.Id})\n";
 
+        // Récupérer les rôles
+        response += "\n🔹 Rôles disponibles :\n";
+        foreach (var role in guild.Roles)
+        {
+            response += $"  - {role.Name} (ID: {role.Id})";
+        }
 
+        // Récupérer les catégories et salons
+        response += "\n📂 Catégories et salons :\n\n";
 
+        var categories = guild.Channels
+            .Where(c => c is SocketCategoryChannel)
+            .Cast<SocketCategoryChannel>();
+
+        foreach (var category in categories)
+        {
+            response += $"  📁 {category.Name}\n";
+
+            var channels = category.Channels
+                .Where(c => c is SocketTextChannel || c is SocketVoiceChannel);
+
+            foreach (var channel in channels)
+            {
+                string type = channel is SocketTextChannel ? "Text" : "Voice";
+                response += $"   | -- #{channel.Name} ({type})\n";
+            }
+
+            response += "    --------------------\n\n";
+        }
+        
+        Console.WriteLine(response);
+        await Say(response);
+    }
+    
+    
     
 }

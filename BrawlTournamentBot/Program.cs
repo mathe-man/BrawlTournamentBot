@@ -5,6 +5,7 @@ using Discord.WebSocket;
 
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,7 +18,9 @@ class Program
     private InteractionService _commands;
     private IServiceProvider _services;
     
-    private readonly ulong guild_id = 1353741399610974381;
+    private readonly ulong guild_id = 1353751399610974381;
+    
+    
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
@@ -30,7 +33,8 @@ class Program
                 {
                     GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
                 }));
-                services.AddSingleton<InteractionService>();
+
+                services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
                 services.AddSingleton<CommandHandler>();
             })
             .Build();
@@ -69,11 +73,11 @@ class Program
         Console.WriteLine(log);
         return Task.CompletedTask;
     }
-    
 
     private async Task MessageReceivedAsync(SocketMessage message)
     {
         if (message.Author.IsBot || message.Author.IsWebhook || !message.Content.StartsWith("/")) return;
+        await Log(message.Author.Username + ": " + message.Content);
     }
 
     private async Task ReadyAsync()

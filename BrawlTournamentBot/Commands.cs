@@ -9,14 +9,14 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("help", "Affiche un message d'aide à propos de ce bot")]
     public async Task Help()
     {
-        await Say("L'aide du bot sera bientôt ajouté.", Context.Channel);//Temp message
         
         
         //Create embed
         var helpEmbed = new EmbedBuilder()
             .WithTitle("Brawl Tournament Bot")
             .WithDescription("Ce message est encore un **essaie**")
-            .WithColor(Color.Blue)
+            .WithFields(new EmbedFieldBuilder().WithIsInline(true).WithValue("Un field"))
+            .WithColor(Color.Purple)
             .WithFooter("C'est un bot que j'ai développé")
             .WithTimestamp(DateTime.Now)
             .Build();
@@ -53,7 +53,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         if (component.Data.CustomId == "delete_embed")
         {
             await component.Message.DeleteAsync();
-            await component.Message.Channel.SendMessageAsync("Le message d'aide a été supprimé.");
         }
     }
     
@@ -70,4 +69,8 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
 
         await Say($"{name} est grave nul en vrai");
     }
+
+
+
+    
 }

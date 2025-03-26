@@ -42,8 +42,10 @@ public class CommandHandler
         // await _commands.RegisterCommandsToGuildAsync(GUILD_ID);
     }
 
-    public async Task RegisterCommandsGuildAsync(ulong guild_id)
+    public async Task RegisterCommandsGuildAsync(ulong guildId)
     {
-        await _commands.RegisterCommandsToGuildAsync(guild_id);
+        Console.WriteLine($"Registering commands for guild {guildId}");
+        await _commands.RegisterCommandsToGuildAsync(guildId);
+        Console.WriteLine("Commands registered for guild " + guildId);
     }
 }

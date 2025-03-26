@@ -182,7 +182,7 @@ public class TreatmentAgent
         StepCount++;
         await TreatmentMessage.DeleteAsync();
         TreatmentMessage = await Channel.SendMessageAsync(newMessage + $"({StepCount}/{StepNumber})");
-        Thread.Sleep(500);
+        //Thread.Sleep(100);
     }
 
     public async Task End()

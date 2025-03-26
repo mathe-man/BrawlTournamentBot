@@ -69,7 +69,46 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
 
         await Say($"{name} est grave nul en vrai");
     }
-    
+
+
+    [SlashCommand("new_team", "Créé une nouvelle équipe")]
+    public async Task CreateTeam([Summary("nom", "le nom de la nouvelle équipe")] string teamName,
+        [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
+        [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
+    {
+        TreatmentAgent treatment = new TreatmentAgent(Context.Channel, 3); treatment.Init();
+        await treatment.Step("Creating message");
+        
+        string response = $"Nouvelle équipe {teamName} avec:\n" +
+                          $" - {player1.Mention}/{player1.Id.ToString()}\n" +
+                          $" - {player2.Mention}/{player2.Id.ToString()}\n";
+
+
+
+        await treatment.Step("Création des rôles et salons");
+        var guild = Context.Guild;
+        
+        //Create channel for the team
+        var teamRole = await guild.CreateRoleAsync($"[{teamName}]");
+        var teamChannel = await guild.CreateTextChannelAsync($"Équipe - {teamName}");
+        
+        
+        await treatment.Step("Attribution des rôles");
+        await teamChannel.AddPermissionOverwriteAsync(guild.EveryoneRole, new (
+            sendMessages: PermValue.Deny, 
+            readMessageHistory: PermValue.Deny));
+
+        await teamChannel.AddPermissionOverwriteAsync(teamRole, new(
+            sendMessages: PermValue.Allow,
+            readMessageHistory: PermValue.Allow));
+
+        await player1.AddRoleAsync(teamRole); await player2.AddRoleAsync(teamRole);
+        
+        response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
+
+        await Say(response);
+        await treatment.End();
+    }
     
     
     
@@ -117,5 +156,37 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     }
     
     
+}
+
+public class TreatmentAgent
+{
+    public IMessageChannel Channel { get; set; }
+
+    public IUserMessage TreatmentMessage { get; private set; }
+
+    private int StepNumber;
+    private int StepCount;
     
+    public TreatmentAgent(IMessageChannel channel, int totalSteps)
+    {
+        StepNumber = totalSteps;
+        Channel = channel;
+    }
+    public async void Init()
+    {
+        TreatmentMessage = await Channel.SendMessageAsync("Traitement de la commande...");
+    }
+
+    public async Task Step(string newMessage)
+    {
+        StepCount++;
+        await TreatmentMessage.DeleteAsync();
+        TreatmentMessage = await Channel.SendMessageAsync(newMessage + $"({StepCount}/{StepNumber})");
+        Thread.Sleep(500);
+    }
+
+    public async Task End()
+    {
+        await TreatmentMessage.DeleteAsync();
+    }
 }

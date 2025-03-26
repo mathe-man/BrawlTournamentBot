@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BrawlTournamentBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+814120d7d2cc87e35c8d8d428e599a4c619733aa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aecb07b95c88213e2fd9eca8267484839f411db5")]
 [assembly: System.Reflection.AssemblyProductAttribute("BrawlTournamentBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BrawlTournamentBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

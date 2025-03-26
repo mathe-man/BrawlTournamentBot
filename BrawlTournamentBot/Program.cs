@@ -22,8 +22,15 @@ class Program
     
     
     private readonly string _token = File.ReadLines("token.txt").First();
-    static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
-    //static void Main(string[] args) => DataBase.RunDB();
+    static void Main(string[] args)
+    {
+        //new Program().RunBotAsync().GetAwaiter().GetResult();
+        //DataBase.RunDB();
+        BrawlStarsAPI api = new();
+        api.TestApi().Wait();
+        
+        Console.WriteLine();
+    }
 
     public async Task RunBotAsync()
     {

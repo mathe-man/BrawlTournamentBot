@@ -111,41 +111,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         await progress.End();
     }
 
-    [SlashCommand("profile", "Affiche des informations à propos d'un compte Brawl Stars.")]
-    public async Task ShowProfile([Summary("tag", "Le tag du joueur: #XXXXXXXXX")] string tag)
-    {
-        Console.WriteLine("ShowProfile called");
-        TreatmentAgent progress = new(Context.Channel, 2); 
-        progress.Init();
-        
-
-        await progress.Step("Récupération des infos...");
-        BrawlStarsApi api = new BrawlStarsApi();
-        var infos = await api.RequestApi(tag);
-
-        if (infos == new Dictionary<string, object>())
-        {
-            await Say("Brawl Stars ne donne pas d'information pour ce joueur,\n" +
-                "vérifiez que le tag est correcte et qu'il éxiste");
-            return;
-        }
-
-        string playerName = infos["name"].ToString();
-        string playerTag = infos["tag"].ToString();
-        string playerTrophies = infos["trophies"].ToString();
-        string playerClub = infos["club"].ToString();
-        
-        await progress.Step("Création de la réponse...");
-        string stringResponse = $"Profile de {playerName}/{playerTag}\n" +
-                                $"Trophés: {playerTrophies}\n" +
-                                $"Club: {playerClub}\n";
-
-        await Say(stringResponse, Context.Channel);
-        await progress.End();
-
-    }
-    
-    
     
     
     

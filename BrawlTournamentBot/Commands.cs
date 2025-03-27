@@ -1,6 +1,7 @@
 using Discord;
 using Discord.WebSocket;
 using Discord.Interactions;
+using DocumentFormat.OpenXml.InkML;
 
 namespace BrawlTournamentBot;
 
@@ -76,8 +77,8 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
         [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
     {
-        TreatmentAgent treatment = new TreatmentAgent(Context.Channel, 3); treatment.Init();
-        await treatment.Step("Creating message");
+        TreatmentAgent progress = new TreatmentAgent(Context.Channel, 3); progress.Init();
+        await progress.Step("Creating message");
         
         string response = $"Nouvelle équipe {teamName} avec:\n" +
                           $" - {player1.Mention}/{player1.Id.ToString()}\n" +
@@ -85,7 +86,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
 
 
 
-        await treatment.Step("Création des rôles et salons");
+        await progress.Step("Création des rôles et salons");
         var guild = Context.Guild;
         
         //Create channel for the team
@@ -93,7 +94,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         var teamChannel = await guild.CreateTextChannelAsync($"Équipe - {teamName}");
         
         
-        await treatment.Step("Attribution des rôles");
+        await progress.Step("Attribution des rôles");
         await teamChannel.AddPermissionOverwriteAsync(guild.EveryoneRole, new (
             sendMessages: PermValue.Deny, 
             readMessageHistory: PermValue.Deny));
@@ -107,8 +108,44 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
 
         await Say(response);
-        await treatment.End();
+        await progress.End();
     }
+
+    [SlashCommand("profile", "Affiche des informations à propos d'un compte Brawl Stars.")]
+    public async Task ShowProfile([Summary("tag", "Le tag du joueur: #XXXXXXXXX")] string tag)
+    {
+        Console.WriteLine("ShowProfile called");
+        TreatmentAgent progress = new(Context.Channel, 2); 
+        progress.Init();
+        
+
+        await progress.Step("Récupération des infos...");
+        BrawlStarsApi api = new BrawlStarsApi();
+        var infos = await api.RequestApi(tag);
+
+        if (infos == new Dictionary<string, object>())
+        {
+            await Say("Brawl Stars ne donne pas d'information pour ce joueur,\n" +
+                "vérifiez que le tag est correcte et qu'il éxiste");
+            return;
+        }
+
+        string playerName = infos["name"].ToString();
+        string playerTag = infos["tag"].ToString();
+        string playerTrophies = infos["trophies"].ToString();
+        string playerClub = infos["club"].ToString();
+        
+        await progress.Step("Création de la réponse...");
+        string stringResponse = $"Profile de {playerName}/{playerTag}\n" +
+                                $"Trophés: {playerTrophies}\n" +
+                                $"Club: {playerClub}\n";
+
+        await Say(stringResponse, Context.Channel);
+        await progress.End();
+
+    }
+    
+    
     
     
     
@@ -162,7 +199,7 @@ public class TreatmentAgent
 {
     public IMessageChannel Channel { get; set; }
 
-    public IUserMessage TreatmentMessage { get; private set; }
+    public ulong TreatmentMessageID { get; private set; }
 
     private int StepNumber;
     private int StepCount;
@@ -173,20 +210,26 @@ public class TreatmentAgent
         Channel = channel;
     }
     public async void Init()
-    {
-        TreatmentMessage = await Channel.SendMessageAsync("Traitement de la commande...");
+    {/*
+        var message = await Channel.SendMessageAsync("Traitement de la commande..." + $"({StepCount}/{StepNumber})");
+        TreatmentMessageID = message.Id;*/
     }
 
     public async Task Step(string newMessage)
-    {
+    {/*
         StepCount++;
-        await TreatmentMessage.DeleteAsync();
-        TreatmentMessage = await Channel.SendMessageAsync(newMessage + $"({StepCount}/{StepNumber})");
-        //Thread.Sleep(100);
+        IMessage message = await Channel.GetMessageAsync(TreatmentMessageID);
+        if (message is IUserMessage userMessage)
+        {
+            await userMessage.ModifyAsync(msg => msg.Content = newMessage);
+        }
+        //await TreatmentMessageID.ModifyAsync(x => x.Content = newMessage + $"({StepCount}/{StepNumber})");
+        //await Channel.SendMessageAsync(newMessage + $"({StepCount}/{StepNumber})");
+*/
     }
 
     public async Task End()
     {
-        await TreatmentMessage.DeleteAsync();
+        //await TreatmentMessage.DeleteAsync();
     }
 }

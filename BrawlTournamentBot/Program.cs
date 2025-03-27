@@ -26,10 +26,9 @@ class Program
     {
         //new Program().RunBotAsync().GetAwaiter().GetResult();
         //DataBase.RunDB();
-        BrawlStarsAPI api = new();
-        api.TestApi().Wait();
+        BrawlStarsApi api = new(); api.TestApi().Wait();
         
-        Console.WriteLine();
+        Console.WriteLine("Program ended");
     }
 
     public async Task RunBotAsync()

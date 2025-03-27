@@ -89,72 +89,57 @@ public class ApiItem
     public Battle Battle { get; set; }
 }
 
-public class BrawlStarsAPI
+public class BrawlStarsApi
 {
     private string apiKey;
-    public string myTag = "%23LQOUJL8CO";
+    public string myTag = "#LQOUJL8CO";
     
-    public BrawlStarsAPI(string keyPath = "bs_api_key.txt")
+    public BrawlStarsApi(string keyPath = "bs_api_key.txt")
     {
         apiKey = File.ReadLines(keyPath).First();
     }
     
     public async Task TestApi()
-    {        
-        BrawlStarsAPI api = new BrawlStarsAPI();
+    {    
+        Console.WriteLine("Testing...");
+        BrawlStarsApi api = new BrawlStarsApi();
         string playerTag = myTag;  // Remplace par le tag du joueur que tu veux tester
-        var result = await api.GetLastBattleAsync(playerTag);
-
-        if (result.Item1 != null && result.Item2 != null)
+        Console.WriteLine("Getting results...");
+        var result = await api.RequestApi(playerTag);
+        
+        Console.WriteLine("Results:");
+        foreach (var key in result.Keys)
         {
-            BattleEvent battleEvent = result.Item1;
-            Battle battle = result.Item2;
-
-            Console.WriteLine($"Last Battle Event: {battleEvent.Mode} on {battleEvent.Map}");
-            Console.WriteLine($"Battle Type: {battle.Type}, Result: {battle.Result}");
-            Console.WriteLine($"Star Player: {battle.StarPlayer?.Name}");
-        }
-        else
-        {
-            Console.WriteLine("Aucun combat n'a été trouvé ou un problème est survenu.");
+            Console.WriteLine(key + ": " + result[key]);
         }
     }
 
-    public async Task<(BattleEvent, Battle)> GetLastBattleAsync(string playerTag)
-    {
-        string apiUrl = $"https://api.brawlstars.com/v1/players/{playerTag}/battlelog";
-        using (HttpClient client = new HttpClient())
-        {
-            // Ajouter l'en-tête pour l'API Key
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + apiKey);
+    public async Task<Dictionary<string, object>> RequestApi(string? playerTag, bool battleLog = false)
+    { 
+        playerTag ??= myTag;
+        string apiUrl = $"https://api.brawlstars.com/v1/players/{playerTag.Replace("#", "%23")}{(battleLog ? "/battlelog" : "")}";
 
-            // Faire la requête GET vers l'API
+        using (var client = new HttpClient())
+        {
+            Console.WriteLine("Request" + "1");
+            // Add header for api
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + apiKey);
+            
+            //Send api request
             HttpResponseMessage response = await client.GetAsync(apiUrl);
             if (response.IsSuccessStatusCode)
             {
+                Console.WriteLine("Request" + "2");
+
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                // Désérialiser la réponse JSON
-                var battleLogs = JsonConvert.DeserializeObject<List<BattleEvent>>(jsonResponse);
-
-                // Si il y a des logs de bataille, renvoyer le dernier
-                if (battleLogs != null && battleLogs.Count > 0)
-                {
-                    BattleEvent lastBattleEvent = battleLogs[0];
-                    Battle lastBattle = await GetBattleDetailsAsync(lastBattleEvent.Id);  // Récupérer les détails du combat
-
-                    return (lastBattleEvent, lastBattle);
-                }
-                else
-                {
-                    Console.WriteLine("Aucun combat trouvé pour ce joueur.");
-                    return (null, null);
-                }
+                Dictionary<string, object> responseObject = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonResponse);
+                
+                return responseObject;
             }
-            else
-            {
-                Console.WriteLine("Erreur de l'API : " + response.StatusCode);
-                return (null, null);
-            }
+            string errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine($"Erreur API: {response.StatusCode} - {errorContent}");
+            return new Dictionary<string, object>();
+
         }
     }
     

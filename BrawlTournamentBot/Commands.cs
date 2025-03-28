@@ -62,6 +62,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("troll", "Ajoute une nom ensuite pour le troll")]
     public async Task Troll([Summary("nom", "le nom à troller")] string name)
     {
+        await DeferAsync(ephemeral: true);
         if (name.ToLower().Contains("math"))
         {
             await Say($"Mathe-man en vrai il est pas si mal,\nmais {Context.User.Username} il a le niveau d'une poubelle", Context.Channel);
@@ -69,6 +70,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         }
 
         await Say($"{name} est grave nul en vrai");
+        await FollowupAsync("Task ended", ephemeral: true);
     }
 
 
@@ -77,8 +79,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
         [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
     {
-        TreatmentAgent progress = new TreatmentAgent(Context.Channel, 3); progress.Init();
-        await progress.Step("Creating message");
         
         string response = $"Nouvelle équipe {teamName} avec:\n" +
                           $" - {player1.Mention}/{player1.Id.ToString()}\n" +
@@ -86,7 +86,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
 
 
 
-        await progress.Step("Création des rôles et salons");
         var guild = Context.Guild;
         
         //Create channel for the team
@@ -94,7 +93,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         var teamChannel = await guild.CreateTextChannelAsync($"Équipe - {teamName}");
         
         
-        await progress.Step("Attribution des rôles");
         await teamChannel.AddPermissionOverwriteAsync(guild.EveryoneRole, new (
             sendMessages: PermValue.Deny, 
             readMessageHistory: PermValue.Deny));
@@ -108,7 +106,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
 
         await Say(response);
-        await progress.End();
     }
 
     
@@ -158,43 +155,4 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     }
     
     
-}
-
-public class TreatmentAgent
-{
-    public IMessageChannel Channel { get; set; }
-
-    public ulong TreatmentMessageID { get; private set; }
-
-    private int StepNumber;
-    private int StepCount;
-    
-    public TreatmentAgent(IMessageChannel channel, int totalSteps)
-    {
-        StepNumber = totalSteps;
-        Channel = channel;
-    }
-    public async void Init()
-    {/*
-        var message = await Channel.SendMessageAsync("Traitement de la commande..." + $"({StepCount}/{StepNumber})");
-        TreatmentMessageID = message.Id;*/
-    }
-
-    public async Task Step(string newMessage)
-    {/*
-        StepCount++;
-        IMessage message = await Channel.GetMessageAsync(TreatmentMessageID);
-        if (message is IUserMessage userMessage)
-        {
-            await userMessage.ModifyAsync(msg => msg.Content = newMessage);
-        }
-        //await TreatmentMessageID.ModifyAsync(x => x.Content = newMessage + $"({StepCount}/{StepNumber})");
-        //await Channel.SendMessageAsync(newMessage + $"({StepCount}/{StepNumber})");
-*/
-    }
-
-    public async Task End()
-    {
-        //await TreatmentMessage.DeleteAsync();
-    }
 }

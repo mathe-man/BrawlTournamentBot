@@ -4,6 +4,7 @@ using Discord.Interactions;
 using Discord.WebSocket;
 
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,12 +25,23 @@ class Program
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args)
     {
+        LoadDependencies();
+        
         //new Program().RunBotAsync().GetAwaiter().GetResult();
-        //DataBase.RunDB();
+        Excel.RunDB();
         
         Console.WriteLine("Program ended");
     }
 
+    static void LoadDependencies()
+    {
+        foreach (string dll in Directory.GetFiles(Directory.GetCurrentDirectory() + "/dependencies", "*.dll"))
+        {
+            Assembly.LoadFrom(dll);
+        }
+    }
+    
+    
     public async Task RunBotAsync()
     {
         var host = Host.CreateDefaultBuilder()

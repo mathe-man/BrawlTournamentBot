@@ -5,7 +5,7 @@ using ClosedXML.Excel;
 
 namespace BrawlTournamentBot;
 
-public class DataBase
+public class Excel
 {
     public static void RunDB()
     {
@@ -30,3 +30,10 @@ public class DataBase
         Console.WriteLine($"Fichier Excel créé : {filePath}");
     }
 }
+
+public class Json
+{
+    
+}
+
+

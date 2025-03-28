@@ -6,6 +6,7 @@ using Discord.WebSocket;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,22 +26,14 @@ class Program
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args)
     {
-        LoadDependencies();
+        DataBase a = new("yooo");
         
         //new Program().RunBotAsync().GetAwaiter().GetResult();
-        Excel.RunDB();
+        //Excel.RunDB();
         
         Console.WriteLine("Program ended");
     }
 
-    static void LoadDependencies()
-    {
-        foreach (string dll in Directory.GetFiles(Directory.GetCurrentDirectory() + "/dependencies", "*.dll"))
-        {
-            Assembly.LoadFrom(dll);
-        }
-    }
-    
     
     public async Task RunBotAsync()
     {

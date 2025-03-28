@@ -6,7 +6,8 @@ using DocumentFormat.OpenXml.InkML;
 namespace BrawlTournamentBot;
 
 public class Commands : InteractionModuleBase<SocketInteractionContext>
-{
+{ 
+    
     [SlashCommand("help", "Affiche un message d'aide à propos de ce bot")]
     public async Task Help()
     {
@@ -35,16 +36,9 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     public async Task Say([Summary("Texte", "Le texte qu'il écrira")] string text,
         [Summary("channel", "le channel où il écrira le message")] ISocketMessageChannel? channel = null)
     {
-        if (Context != null) //If is called from discord
-        {
-            if(Equals(channel, null))   channel = Context.Channel;
+        if(Equals(channel, null))   channel = Context.Channel;
             
-            await channel.SendMessageAsync(text);
-        }   
-        else                //Is called from the code
-        {
-            
-        }
+        await channel.SendMessageAsync(text);
     }
 
 
@@ -74,7 +68,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     }
 
 
-    [SlashCommand("new_team", "Créé une nouvelle équipe")]
+    [SlashCommand("new", "Créé une nouvelle équipe")]
     public async Task CreateTeam([Summary("nom", "le nom de la nouvelle équipe")] string teamName,
         [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
         [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
@@ -153,6 +147,9 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         Console.WriteLine(response);
         await Say(response);
     }
-    
-    
+
+    public async Task Register()
+    {
+        
+    }
 }

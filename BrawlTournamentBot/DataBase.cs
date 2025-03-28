@@ -9,7 +9,7 @@ public class Excel
 {
     public static void RunDB()
     {
-        string filePath = "mon_fichier.xlsx";
+        string filePath = "DB/fiche de calcul.xlsx";
 
         using (var workbook = new XLWorkbook())  // Crée un nouveau fichier Excel
         {
@@ -31,9 +31,23 @@ public class Excel
     }
 }
 
-public class Json
+public class DataBase
 {
-    
+    public readonly string FolderPath;
+    public Dictionary<string, string> players = new ();
+
+    public DataBase(string dbFolderPath = "DB")
+    {
+        FolderPath = dbFolderPath.EndsWith('/') ? dbFolderPath : dbFolderPath + "/";
+        if (Directory.Exists(FolderPath))
+        {
+            Console.WriteLine($"Directory exist:{new DirectoryInfo(FolderPath).FullName}");
+        }
+        else
+        {
+            Console.WriteLine($"Directory created:{Directory.CreateDirectory(FolderPath).FullName}");
+        }
+    }
 }
 
 

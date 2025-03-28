@@ -21,13 +21,4 @@
     </ItemGroup>
    
    
-   <Target Name="MoveDependencies" AfterTargets="Build">
-    <ItemGroup>
-        <Dependencies Include="$(OutputPath)**\*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
-    </ItemGroup>
-    <MakeDir Directories="$(OutputPath)dependencies" />
-    <Copy SourceFiles="@(Dependencies)" DestinationFolder="$(OutputPath)dependencies" />
-    <Delete Files="@(Dependencies)" />
-</Target>
-
 </Project>

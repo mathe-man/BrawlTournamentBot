@@ -68,6 +68,13 @@ public class DataBase
         return result;
     }
 
+    
+    /// <summary>
+    /// Save a Dictionary(string, string) to a file with a json formating indented formatting
+    /// </summary>
+    /// <param name="file">The where the data will be saved, it's created if not found</param>
+    /// <param name="data">A Dictionary of string to save</param>
+    /// <returns>The same Dictionary given in parameters</returns>
     private Dictionary<string, string> SaveDbFile(string file, Dictionary<string, string> data)
     {
         if (!File.Exists(file))

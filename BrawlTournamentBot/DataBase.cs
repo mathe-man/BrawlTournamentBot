@@ -37,7 +37,8 @@ public class Excel
 public class DataBase
 {
     public readonly string DataBaseFolder;
-    public List<Player> Players = new ();
+    public List<Player> Players;
+    public List<>
 
     public DataBase(string dbFolderPath = "DB")
     {
@@ -123,4 +124,18 @@ public class Player
         DiscordUserName = discordName;
     }
 
+}
+
+
+public class Team
+{
+    [JsonPropertyName("Name")]
+    public string Name { get; set; }
+    
+    [JsonPropertyName("player1")]
+    public Player Player1 { get; set; }
+    
+    [JsonPropertyName("player2")]
+    public Player Player2 { get; set; }
+    
 }

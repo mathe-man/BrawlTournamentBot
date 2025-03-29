@@ -176,6 +176,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         _db.SaveDbFile("TestPlayer", _db.Players);
         
         
-        await FollowupAsync("Task ended", ephemeral: true);
+        await FollowupAsync("Joueur rajouter.", ephemeral: true);
     }
 }

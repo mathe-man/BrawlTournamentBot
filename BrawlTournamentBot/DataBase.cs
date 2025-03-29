@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Discord;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 using ClosedXML.Excel;
@@ -35,7 +37,7 @@ public class Excel
 public class DataBase
 {
     public readonly string DataBaseFolder;
-    public Dictionary<string, string> Players = new ();
+    public Dictionary<string, Player> Players = new ();
 
     public DataBase(string dbFolderPath = "DB")
     {
@@ -45,8 +47,8 @@ public class DataBase
         else Console.WriteLine($"Directory created:{Directory.CreateDirectory(DataBaseFolder).FullName}");
 
         
-        if (File.Exists("players.json")) Players = LoadDbFile("players.json");
-        else Players = SaveDbFile("players.json", new ());
+        if (File.Exists("players.json")) Players = LoadDbFile<Player>("players.json");
+        else Players = SaveDbFile<Player>("players.json", new ());
     }
 
 
@@ -56,13 +58,13 @@ public class DataBase
     /// <param name="file">The json file, it needs to be in the DataBaseFolder</param>
     /// <returns>A Dictionary(string, string) representing the file content</returns>
     /// <exception cref="FileNotFoundException">If the given file path is not found in the DataBaseFolder</exception>
-    private Dictionary<string, string> LoadDbFile(string file)
+    private Dictionary<string, T> LoadDbFile<T>(string file)
     {
         if (!File.Exists(file))
             throw new FileNotFoundException($"The file is not in the DB folder({DataBaseFolder}{file})", file);
         
         string content = File.ReadAllText(file);
-        Dictionary<string, string>? result = JsonConvert.DeserializeObject<Dictionary<string, string>>(DataBaseFolder + file);
+        Dictionary<string, T>? result = JsonConvert.DeserializeObject<Dictionary<string, T>>(DataBaseFolder + file);
         
         result ??= new();
         return result;
@@ -75,7 +77,7 @@ public class DataBase
     /// <param name="file">The where the data will be saved, it's created if not found</param>
     /// <param name="data">A Dictionary of string to save</param>
     /// <returns>The same Dictionary given in parameters</returns>
-    private Dictionary<string, string> SaveDbFile(string file, Dictionary<string, string> data)
+    private Dictionary<string, T> SaveDbFile<T>(string file, Dictionary<string, T> data)
     {
         if (!File.Exists(file))
         {
@@ -91,3 +93,34 @@ public class DataBase
 }
 
 
+
+public class Player
+{
+    [JsonPropertyName("Tag")]
+    public string Tag { get; set; }
+    
+    [JsonPropertyName("SupercellID")]
+    public string SupercellID { get; set; }
+    
+    [JsonPropertyName("BrawlName")]
+    public string BrawlName { get; set; }
+    
+    [JsonPropertyName("DiscordName")]
+    public string DiscordUserName { get; set; }
+    
+    [JsonPropertyName("DiscordId")]
+    public string DiscordId { get; set; }
+    
+    [JsonPropertyName("Team")]
+    public string? TeamName { get; set; }
+
+    public Player(string brawlName, string tag, string supercellId, string discordName, string discordId)
+    {
+        BrawlName = brawlName;
+        SupercellID = supercellId;
+        Tag = tag;
+        DiscordId = discordId;
+        DiscordUserName = discordName;
+    }
+
+}

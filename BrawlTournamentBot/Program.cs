@@ -26,9 +26,9 @@ class Program
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args)
     {
-        DataBase a = new("DataBase");
+        DataBase db = new("DataBase");
         
-        //new Program().RunBotAsync().GetAwaiter().GetResult();
+        new Program().RunBotAsync().GetAwaiter().GetResult();
         //Excel.RunDB();
         
         Console.WriteLine("\nProgram ended");
@@ -47,12 +47,13 @@ class Program
 
                 services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
                 services.AddSingleton<CommandHandler>();
+                services.AddSingleton<DataBase>();
             })
             .Build();
         
         using var scope = host.Services.CreateAsyncScope();
-        
         _services = scope.ServiceProvider;
+        
         _client = _services.GetRequiredService<DiscordSocketClient>();
         _commands = _services.GetRequiredService<InteractionService>();
         
@@ -70,7 +71,6 @@ class Program
         var commandHandler = _services.GetRequiredService<CommandHandler>();
         await commandHandler.InitializeAsync();
 
-        //await Commands.Display(_client.Guilds.First());
         
         await Task.Delay(-1); // Garde le bot en ligne
     }

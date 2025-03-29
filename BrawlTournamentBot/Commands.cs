@@ -6,13 +6,16 @@ using DocumentFormat.OpenXml.InkML;
 namespace BrawlTournamentBot;
 
 public class Commands : InteractionModuleBase<SocketInteractionContext>
-{ 
+{
+    public Commands()
+    {
+        Console.WriteLine("Commaand instancied");
+    }
     
     [SlashCommand("help", "Affiche un message d'aide à propos de ce bot")]
     public async Task Help()
     {
-        
-        
+        await DeferAsync(ephemeral: true);
         //Create embed
         var helpEmbed = new EmbedBuilder()
             .WithTitle("Brawl Tournament Bot")
@@ -30,15 +33,21 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
             
             
         await Context.Channel.SendMessageAsync(embed: helpEmbed, components: component);
+        
+        await FollowupAsync("Task ended", ephemeral: true);
     }
     
     [SlashCommand("say", "Fait dire quelque chose au bot")]
     public async Task Say([Summary("Texte", "Le texte qu'il écrira")] string text,
         [Summary("channel", "le channel où il écrira le message")] ISocketMessageChannel? channel = null)
     {
+        await DeferAsync(ephemeral: true);
+        
         if(Equals(channel, null))   channel = Context.Channel;
             
         await channel.SendMessageAsync(text);
+        
+        await FollowupAsync("Task ended", ephemeral: true);
     }
 
 
@@ -73,7 +82,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
         [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
     {
-        
+        await DeferAsync(ephemeral: true);
         string response = $"Nouvelle équipe {teamName} avec:\n" +
                           $" - {player1.Mention}/{player1.Id.ToString()}\n" +
                           $" - {player2.Mention}/{player2.Id.ToString()}\n";
@@ -100,6 +109,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
 
         await Say(response);
+        await FollowupAsync("Task ended", ephemeral: true);
     }
 
     
@@ -109,6 +119,7 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("display", "Montre un arbre représentant le serveur")]
     public async Task Display()
     {
+        await DeferAsync(ephemeral: true);
         SocketGuild guild = Context.Guild;
         string response = "";
         
@@ -146,10 +157,14 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         
         Console.WriteLine(response);
         await Say(response);
+        await FollowupAsync("Task ended", ephemeral: true);
     }
 
     public async Task Register()
     {
+        await DeferAsync(ephemeral: true);
         
+        
+        await FollowupAsync("Task ended", ephemeral: true);
     }
 }

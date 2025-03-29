@@ -160,21 +160,26 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
             
             await Say(response);
             await FollowupAsync("Task ended", ephemeral: true);
+            return;
         }
-        else if (_db.Players.All(p => p.DiscordId != player2.Mention))
+        if (_db.Players.All(p => p.DiscordId != player2.Mention))
         {
             response = $"Le joueur {player1.Mention} n'est pas enregistrer";
             
             await Say(response);
             await FollowupAsync("Task ended", ephemeral: true);
+            return;
         }
-        
+        Console.WriteLine("Players are indexed");
         
         
         response = $"Nouvelle équipe {teamName} avec:\n" +
-                          $" - {player1.Mention}/{player1.Id.ToString()}\n" +
-                          $" - {player2.Mention}/{player2.Id.ToString()}\n";
+                          $" - {player1.Mention}\n" +
+                          $" - {player2.Mention}\n";
 
+        
+        _db.Teams.Add(new Team(teamName, _db.Players.First(p => p.DiscordId == player1.Mention), _db.Players.First(p => p.DiscordId == player2.Mention)));
+        _db.SaveDataBase();
         
         var guild = Context.Guild;
         
@@ -195,9 +200,10 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
 
         
-        
-        await Say(response);
+        Console.WriteLine("Team created");
+        await Context.Channel.SendMessageAsync(response);
         await FollowupAsync("Task ended", ephemeral: true);
+        Console.WriteLine("Command ended");
     }
 
 }

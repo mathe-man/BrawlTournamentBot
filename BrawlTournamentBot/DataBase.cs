@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Discord;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
@@ -37,13 +38,15 @@ public class Excel
 public class DataBase
 {
     public readonly string DataBaseFolder;
-    public List<Player> Players;
-    public List<Team> Teams;
+    public List<Player> Players = new ();
+    public List<Team> Teams = new ();
 
     public DataBase(string dbFolderPath = "DB")
     {
         DataBaseFolder = dbFolderPath.EndsWith('/') ? dbFolderPath : dbFolderPath + "/";
         
+        if (!Directory.Exists(DataBaseFolder)) Directory.CreateDirectory(DataBaseFolder);
+       
         LoadDataBase();
     }
 
@@ -75,7 +78,7 @@ public class DataBase
             throw new FileNotFoundException($"The file is not in the DB folder({DataBaseFolder}{file})", file);
         
         string content = File.ReadAllText(file);
-        List<T>? result = JsonConvert.DeserializeObject<List<T>>(DataBaseFolder + file);
+        List<T>? result = JsonConvert.DeserializeObject<List<T>>(content);
         
         result ??= new();
         return result;
@@ -94,7 +97,7 @@ public class DataBase
         
         string jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
         
-        File.WriteAllText(DataBaseFolder + file, jsonString);
+        File.WriteAllText(DataBaseFolder + file, jsonString, Encoding.UTF8);
 
         return data;
     }
@@ -107,8 +110,8 @@ public class Player
     [JsonPropertyName("Tag")]
     public string Tag { get; set; }
     
-    [JsonPropertyName("SupercellID")]
-    public string SupercellID { get; set; }
+    [JsonPropertyName("SupercellId")]
+    public string SupercellId { get; set; }
     
     [JsonPropertyName("BrawlName")]
     public string BrawlName { get; set; }
@@ -125,7 +128,7 @@ public class Player
     public Player(string brawlName, string tag, string supercellId, string discordName, string discordId)
     {
         BrawlName = brawlName;
-        SupercellID = supercellId;
+        SupercellId = supercellId;
         Tag = tag;
         DiscordId = discordId;
         DiscordUserName = discordName;
@@ -148,5 +151,11 @@ public class Team
     
     [JsonPropertyName("player2")]
     public Player Player2 { get; set; }
-    
+
+    public Team(string name, Player player1, Player player2)
+    {
+        Name = name;
+        Player1 = player1;
+        Player2 = player2;
+    }
 }

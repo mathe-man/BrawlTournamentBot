@@ -26,10 +26,9 @@ class Program
     private readonly string _token = File.ReadLines("token.txt").First();
     static void Main(string[] args)
     {
-        DataBase db = new("DataBase");
         
         new Program().RunBotAsync().GetAwaiter().GetResult();
-        //Excel.RunDB();
+        
         
         Console.WriteLine("\nProgram ended");
     }

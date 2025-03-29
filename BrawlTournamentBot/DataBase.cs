@@ -37,7 +37,7 @@ public class Excel
 public class DataBase
 {
     public readonly string DataBaseFolder;
-    public Dictionary<string, Player> Players = new ();
+    public List<Player> Players = new ();
 
     public DataBase(string dbFolderPath = "DB")
     {
@@ -58,13 +58,13 @@ public class DataBase
     /// <param name="file">The json file, it needs to be in the DataBaseFolder</param>
     /// <returns>A Dictionary(string, string) representing the file content</returns>
     /// <exception cref="FileNotFoundException">If the given file path is not found in the DataBaseFolder</exception>
-    private Dictionary<string, T> LoadDbFile<T>(string file)
+    public List<T> LoadDbFile<T>(string file)
     {
         if (!File.Exists(file))
             throw new FileNotFoundException($"The file is not in the DB folder({DataBaseFolder}{file})", file);
         
         string content = File.ReadAllText(file);
-        Dictionary<string, T>? result = JsonConvert.DeserializeObject<Dictionary<string, T>>(DataBaseFolder + file);
+        List<T>? result = JsonConvert.DeserializeObject<List<T>>(DataBaseFolder + file);
         
         result ??= new();
         return result;
@@ -77,7 +77,7 @@ public class DataBase
     /// <param name="file">The where the data will be saved, it's created if not found</param>
     /// <param name="data">A Dictionary of string to save</param>
     /// <returns>The same Dictionary given in parameters</returns>
-    private Dictionary<string, T> SaveDbFile<T>(string file, Dictionary<string, T> data)
+    public List<T> SaveDbFile<T>(string file, List<T> data)
     {
         if (!File.Exists(file))
         {

@@ -7,9 +7,11 @@ namespace BrawlTournamentBot;
 
 public class Commands : InteractionModuleBase<SocketInteractionContext>
 {
-    public Commands()
+    private DataBase _db;
+    public Commands(DataBase db)
     {
         Console.WriteLine("Commaand instancied");
+        _db = db;
     }
     
     [SlashCommand("help", "Affiche un message d'aide à propos de ce bot")]
@@ -160,9 +162,18 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         await FollowupAsync("Task ended", ephemeral: true);
     }
 
-    public async Task Register()
+    [SlashCommand("register", "S'enregistre dans la base de donné des joueurs")]
+    public async Task Register(
+        [Summary("brawl-name", "votre pseudo Brawl Starts")] string brawlName,
+        [Summary("tag", "votre tag Brawl Start comme: #X75A etc.")] string tag,
+        [Summary("ID", "Votre Supercell ID")] string ID
+        )
     {
         await DeferAsync(ephemeral: true);
+
+        Player player = new(brawlName, tag, ID, Context.User.GlobalName, Context.User.Mention);
+        _db.Players.Add(player);
+        _db.SaveDbFile("TestPlayer", _db.Players);
         
         
         await FollowupAsync("Task ended", ephemeral: true);

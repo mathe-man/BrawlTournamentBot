@@ -38,18 +38,28 @@ public class DataBase
 {
     public readonly string DataBaseFolder;
     public List<Player> Players;
-    public List<>
+    public List<Team> Teams;
 
     public DataBase(string dbFolderPath = "DB")
     {
         DataBaseFolder = dbFolderPath.EndsWith('/') ? dbFolderPath : dbFolderPath + "/";
         
-        if (Directory.Exists(DataBaseFolder))   Console.WriteLine($"Directory exist:{new DirectoryInfo(DataBaseFolder).FullName}");
-        else Console.WriteLine($"Directory created:{Directory.CreateDirectory(DataBaseFolder).FullName}");
+        LoadDataBase();
+    }
 
+    public void SaveDataBase()
+    {
+        SaveDbFile("players.json", Players);
+        SaveDbFile("teams.json", Teams);
+    }
+
+    public void LoadDataBase()
+    {
+        if (!File.Exists("players.json")) File.Create("players.json").Close();
+        if (!File.Exists("teams.json")) File.Create("teams.json").Close();
         
-        if (File.Exists("players.json")) Players = LoadDbFile<Player>("players.json");
-        else Players = SaveDbFile<Player>("players.json", new ());
+        Players = LoadDbFile<Player>("players.json");
+        Teams = LoadDbFile<Team>("teams.json");
     }
 
 
@@ -80,10 +90,7 @@ public class DataBase
     /// <returns>The same Dictionary given in parameters</returns>
     public List<T> SaveDbFile<T>(string file, List<T> data)
     {
-        if (!File.Exists(file))
-        {
-            FileStream fs = File.Create(DataBaseFolder + file); fs.Close();
-        }
+        if (!File.Exists(file)) File.Create(DataBaseFolder + file).Close();
         
         string jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
         
@@ -124,6 +131,10 @@ public class Player
         DiscordUserName = discordName;
     }
 
+    public void JoinTeam(string teamName)
+    {
+        TeamName = teamName;
+    }
 }
 
 

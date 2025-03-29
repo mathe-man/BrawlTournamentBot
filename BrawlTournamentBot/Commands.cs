@@ -79,41 +79,6 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
     }
 
 
-    [SlashCommand("new", "Créé une nouvelle équipe")]
-    public async Task CreateTeam([Summary("nom", "le nom de la nouvelle équipe")] string teamName,
-        [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
-        [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
-    {
-        await DeferAsync(ephemeral: true);
-        string response = $"Nouvelle équipe {teamName} avec:\n" +
-                          $" - {player1.Mention}/{player1.Id.ToString()}\n" +
-                          $" - {player2.Mention}/{player2.Id.ToString()}\n";
-
-
-
-        var guild = Context.Guild;
-        
-        //Create channel for the team
-        var teamRole = await guild.CreateRoleAsync($"[{teamName}]");
-        var teamChannel = await guild.CreateTextChannelAsync($"Équipe - {teamName}");
-        
-        
-        await teamChannel.AddPermissionOverwriteAsync(guild.EveryoneRole, new (
-            sendMessages: PermValue.Deny, 
-            readMessageHistory: PermValue.Deny));
-
-        await teamChannel.AddPermissionOverwriteAsync(teamRole, new(
-            sendMessages: PermValue.Allow,
-            readMessageHistory: PermValue.Allow));
-
-        await player1.AddRoleAsync(teamRole); await player2.AddRoleAsync(teamRole);
-        
-        response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
-
-        await Say(response);
-        await FollowupAsync("Task ended", ephemeral: true);
-    }
-
     
     
     
@@ -172,10 +137,67 @@ public class Commands : InteractionModuleBase<SocketInteractionContext>
         await DeferAsync(ephemeral: true);
 
         Player player = new(brawlName, tag, ID, Context.User.GlobalName, Context.User.Mention);
-        _db.Players.Add(player);
-        _db.SaveDbFile("TestPlayer", _db.Players);
         
+        _db.Players.Add(player);
+        _db.SaveDataBase();
         
         await FollowupAsync("Joueur rajouter.", ephemeral: true);
     }
+    
+    
+    [SlashCommand("new", "Créé une nouvelle équipe")]
+    public async Task CreateTeam([Summary("nom", "le nom de la nouvelle équipe")] string teamName,
+        [Summary("joueur1", "premier joueur")] SocketGuildUser player1,
+        [Summary("joueur2", "deuxième joueur")] SocketGuildUser player2)
+    {
+        await DeferAsync(ephemeral: true);
+        string response = "";
+        
+        //Verify the presence of the two players in the DB
+        if (_db.Players.All(p => p.DiscordId != player1.Mention))
+        {
+            response = $"Le joueur {player1.Mention} n'est pas enregistrer";
+            
+            await Say(response);
+            await FollowupAsync("Task ended", ephemeral: true);
+        }
+        else if (_db.Players.All(p => p.DiscordId != player2.Mention))
+        {
+            response = $"Le joueur {player1.Mention} n'est pas enregistrer";
+            
+            await Say(response);
+            await FollowupAsync("Task ended", ephemeral: true);
+        }
+        
+        
+        
+        response = $"Nouvelle équipe {teamName} avec:\n" +
+                          $" - {player1.Mention}/{player1.Id.ToString()}\n" +
+                          $" - {player2.Mention}/{player2.Id.ToString()}\n";
+
+        
+        var guild = Context.Guild;
+        
+        //Create channel and roles for the team
+        var teamRole = await guild.CreateRoleAsync($"[{teamName}]");
+        var teamChannel = await guild.CreateTextChannelAsync($"Équipe - {teamName}");
+        
+        
+        await teamChannel.AddPermissionOverwriteAsync(guild.EveryoneRole, new (
+            sendMessages: PermValue.Deny, 
+            readMessageHistory: PermValue.Deny));
+        await teamChannel.AddPermissionOverwriteAsync(teamRole, new(
+            sendMessages: PermValue.Allow,
+            readMessageHistory: PermValue.Allow));
+        await player1.AddRoleAsync(teamRole); 
+        await player2.AddRoleAsync(teamRole);
+        
+        response += $"\nSalon de l'équipe: {teamChannel.Mention}\n";
+
+        
+        
+        await Say(response);
+        await FollowupAsync("Task ended", ephemeral: true);
+    }
+
 }

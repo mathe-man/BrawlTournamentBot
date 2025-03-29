@@ -3,14 +3,10 @@ using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
 
-using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using BrawlTournamentBot.Commands;
 
 namespace BrawlTournamentBot;
 
@@ -61,7 +57,7 @@ class Program
         _client.Log += LogAsync;
         _client.Ready += ReadyAsync;
         _client.MessageReceived += MessageReceivedAsync;
-        _client.ButtonExecuted += Commands.HandleButton;
+        _client.ButtonExecuted += BotCommands.HandleButton;
         
         
         await _client.LoginAsync(TokenType.Bot, _token);

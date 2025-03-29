@@ -3,12 +3,12 @@ using Discord.WebSocket;
 using Discord.Interactions;
 using DocumentFormat.OpenXml.InkML;
 
-namespace BrawlTournamentBot;
+namespace BrawlTournamentBot.Commands;
 
-public class Commands : InteractionModuleBase<SocketInteractionContext>
+public class BotCommands : InteractionModuleBase<SocketInteractionContext>
 {
     private DataBase _db;
-    public Commands(DataBase db)
+    public BotCommands(DataBase db)
     {
         Console.WriteLine("Commaand instancied");
         _db = db;

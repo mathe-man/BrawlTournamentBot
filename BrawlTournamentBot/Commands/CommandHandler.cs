@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace BrawlTournamentBot;
+namespace BrawlTournamentBot.Commands;
 
 public class CommandHandler
 {
